@@ -11,12 +11,6 @@
 #import "ioSock.h"
 
 @interface ApplicationDelegate : NSObject {
-	NSString *_deviceToken, *_payload, *_certificate;
-	otSocket socket;
-	SSLContextRef context;
-	SecKeychainRef keychain;
-	SecCertificateRef certificate;
-	SecIdentityRef identity;
 }
 #pragma mark IBAction
 - (IBAction)push:(id)sender;

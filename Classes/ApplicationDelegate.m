@@ -8,9 +8,17 @@
 
 #import "ApplicationDelegate.h"
 
-@interface ApplicationDelegate ()
+static NSString *deviceTokenKey = @"deviceToken";
+
+@interface ApplicationDelegate () {
+	otSocket socket;
+	SSLContextRef context;
+	SecKeychainRef keychain;
+	SecCertificateRef certificate;
+	SecIdentityRef identity;
+}
 #pragma mark Properties
-@property(nonatomic, retain) NSString *deviceToken, *payload, *certificate;
+@property(nonatomic, retain) NSString *deviceToken, *payload, *certificatePath;
 #pragma mark Private
 - (void)connect;
 - (void)disconnect;
@@ -23,9 +31,9 @@
 - (id)init {
 	self = [super init];
 	if(self != nil) {
-		self.deviceToken = @"";
 		self.payload = @"{\"aps\":{\"alert\":\"This is some fancy message.\",\"badge\":1}}";
-		self.certificate = [[NSBundle mainBundle] pathForResource:@"apns" ofType:@"cer"];
+		self.deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey:deviceTokenKey];
+		self.certificatePath = [[NSBundle mainBundle] pathForResource:@"wwdc alert aps_development" ofType:@"cer"];
 	}
 	return self;
 }
@@ -35,7 +43,7 @@
 	// Release objects.
 	self.deviceToken = nil;
 	self.payload = nil;
-	self.certificate = nil;
+	self.certificatePath = nil;
 	
 	// Call super.
 	[super dealloc];
@@ -46,8 +54,16 @@
 #pragma mark Properties
 
 @synthesize deviceToken = _deviceToken;
-@synthesize payload = _payload;
-@synthesize certificate = _certificate;
+@synthesize payload;
+@synthesize certificatePath;
+
+- (void) setDeviceToken:(NSString *)deviceToken {
+    if (_deviceToken != deviceToken) {
+        [_deviceToken release];
+        _deviceToken = [deviceToken retain];
+        [[NSUserDefaults standardUserDefaults] setValue:_deviceToken forKey:deviceTokenKey];
+    }
+}
 
 #pragma mark Inherent
 
@@ -67,7 +83,7 @@
 
 - (void)connect {
 	
-	if(self.certificate == nil) {
+	if(self.certificatePath == nil) {
 		return;
 	}
 	
@@ -94,7 +110,7 @@
 	result = SecKeychainCopyDefault(&keychain);// NSLog(@"SecKeychainOpen(): %d", result);
 	
 	// Create certificate.
-	NSData *certificateData = [NSData dataWithContentsOfFile:self.certificate];
+	NSData *certificateData = [NSData dataWithContentsOfFile:self.certificatePath];
     
     certificate = SecCertificateCreateWithData(kCFAllocatorDefault, (CFDataRef)certificateData);
     if (certificate == NULL)
@@ -117,7 +133,7 @@
 
 - (void)disconnect {
 	
-	if(self.certificate == nil) {
+	if(self.certificatePath == nil) {
 		return;
 	}
 	
@@ -151,7 +167,7 @@
 
 - (IBAction)push:(id)sender {
 	
-	if(self.certificate == nil) {
+	if(self.certificatePath == nil) {
         NSLog(@"you need the APNS Certificate for the app to work");
         exit(1);
 	}
