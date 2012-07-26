@@ -31,9 +31,17 @@ static NSString *deviceTokenKey = @"deviceToken";
 - (id)init {
 	self = [super init];
 	if(self != nil) {
-		self.payload = @"{\"aps\":{\"alert\":\"This is some fancy message.\",\"badge\":1}}";
 		self.deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey:deviceTokenKey];
-		self.certificatePath = [[NSBundle mainBundle] pathForResource:@"wwdc alert aps_development" ofType:@"cer"];
+        NSError *error = nil;
+        NSData *payloadData = [NSJSONSerialization dataWithJSONObject:@{@"aps" : @{
+                               @"alert" : @"This is some fancy message",
+                               @"badge" : @0 }}
+                                                                options:0 // NSJSONWritingPrettyPrinted
+                                                                  error:&error];
+		self.payload = [[[NSString alloc] initWithData:payloadData
+                                              encoding:NSUTF8StringEncoding]
+                        autorelease];
+		self.certificatePath = [[NSBundle mainBundle] pathForResource:@"aps_development" ofType:@"cer"];
 	}
 	return self;
 }
@@ -92,22 +100,22 @@ static NSString *deviceTokenKey = @"deviceToken";
 	
 	// Establish connection to server.
 	PeerSpec peer;
-	result = MakeServerConnection("gateway.sandbox.push.apple.com", 2195, &socket, &peer);// NSLog(@"MakeServerConnection(): %d", result);
+	result = MakeServerConnection("gateway.sandbox.push.apple.com", 2195, &socket, &peer); NSLog(@"MakeServerConnection(): %d", result);
 	
 	// Create new SSL context.
-	result = SSLNewContext(false, &context);// NSLog(@"SSLNewContext(): %d", result);
+	result = SSLNewContext(false, &context); NSLog(@"SSLNewContext(): %d", result);
 	
 	// Set callback functions for SSL context.
-	result = SSLSetIOFuncs(context, SocketRead, SocketWrite);// NSLog(@"SSLSetIOFuncs(): %d", result);
+	result = SSLSetIOFuncs(context, SocketRead, SocketWrite); NSLog(@"SSLSetIOFuncs(): %d", result);
 	
 	// Set SSL context connection.
-	result = SSLSetConnection(context, socket);// NSLog(@"SSLSetConnection(): %d", result);
+	result = SSLSetConnection(context, socket); NSLog(@"SSLSetConnection(): %d", result);
 	
 	// Set server domain name.
-	result = SSLSetPeerDomainName(context, "gateway.sandbox.push.apple.com", 30);// NSLog(@"SSLSetPeerDomainName(): %d", result);
+	result = SSLSetPeerDomainName(context, "gateway.sandbox.push.apple.com", 30); NSLog(@"SSLSetPeerDomainName(): %d", result);
 	
 	// Open keychain.
-	result = SecKeychainCopyDefault(&keychain);// NSLog(@"SecKeychainOpen(): %d", result);
+	result = SecKeychainCopyDefault(&keychain); NSLog(@"SecKeychainOpen(): %d", result);
 	
 	// Create certificate.
 	NSData *certificateData = [NSData dataWithContentsOfFile:self.certificatePath];
@@ -117,16 +125,16 @@ static NSString *deviceTokenKey = @"deviceToken";
         NSLog (@"SecCertificateCreateWithData failled");
     
 	// Create identity.
-	result = SecIdentityCreateWithCertificate(keychain, certificate, &identity);// NSLog(@"SecIdentityCreateWithCertificate(): %d", result);
+	result = SecIdentityCreateWithCertificate(keychain, certificate, &identity); NSLog(@"SecIdentityCreateWithCertificate(): %d", result);
 	
 	// Set client certificate.
 	CFArrayRef certificates = CFArrayCreate(NULL, (const void **)&identity, 1, NULL);
-	result = SSLSetCertificate(context, certificates);// NSLog(@"SSLSetCertificate(): %d", result);
+	result = SSLSetCertificate(context, certificates); NSLog(@"SSLSetCertificate(): %d", result);
 	CFRelease(certificates);
 	
 	// Perform SSL handshake.
 	do {
-		result = SSLHandshake(context);// NSLog(@"SSLHandshake(): %d", result);
+		result = SSLHandshake(context); NSLog(@"SSLHandshake(): %d", result);
 	} while(result == errSSLWouldBlock);
 	
 }
