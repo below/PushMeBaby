@@ -19,12 +19,36 @@ static NSString *deviceTokenKey = @"deviceToken";
 }
 #pragma mark Properties
 @property(nonatomic, retain) NSString *deviceToken, *payload, *certificatePath;
+
+@property (readonly) NSString *gateway;
+@property (readonly) BOOL isSandbox;
+@property (readonly) NSString *certificateName;
+
 #pragma mark Private
 - (void)connect;
 - (void)disconnect;
 @end
 
 @implementation ApplicationDelegate
+
+- (BOOL) isSandbox {
+    return NO;
+}
+
+- (NSString *) gateway {
+    if (self.isSandbox)
+        return @"gateway.sandbox.push.apple.com";
+    else
+        return @"gateway.push.apple.com";
+}
+
+- (NSString *) certificateName {
+    if (self.isSandbox)
+        return @"aps_development";
+    else
+        return @"aps_production-wwdc";
+    
+}
 
 #pragma mark Allocation
 
@@ -41,7 +65,7 @@ static NSString *deviceTokenKey = @"deviceToken";
 		self.payload = [[[NSString alloc] initWithData:payloadData
                                               encoding:NSUTF8StringEncoding]
                         autorelease];
-		self.certificatePath = [[NSBundle mainBundle] pathForResource:@"aps_development" ofType:@"cer"];
+		self.certificatePath = [[NSBundle mainBundle] pathForResource:self.certificateName ofType:@"cer"];
 	}
 	return self;
 }
@@ -100,7 +124,7 @@ static NSString *deviceTokenKey = @"deviceToken";
 	
 	// Establish connection to server.
 	PeerSpec peer;
-	result = MakeServerConnection("gateway.sandbox.push.apple.com", 2195, &socket, &peer); NSLog(@"MakeServerConnection(): %d", result);
+	result = MakeServerConnection([self.gateway cStringUsingEncoding:NSUTF8StringEncoding], 2195, &socket, &peer); NSLog(@"MakeServerConnection(): %d", result);
 	
 	// Create new SSL context.
 	result = SSLNewContext(false, &context); NSLog(@"SSLNewContext(): %d", result);
@@ -112,7 +136,7 @@ static NSString *deviceTokenKey = @"deviceToken";
 	result = SSLSetConnection(context, socket); NSLog(@"SSLSetConnection(): %d", result);
 	
 	// Set server domain name.
-	result = SSLSetPeerDomainName(context, "gateway.sandbox.push.apple.com", 30); NSLog(@"SSLSetPeerDomainName(): %d", result);
+	result = SSLSetPeerDomainName(context, [self.gateway cStringUsingEncoding:NSUTF8StringEncoding], 30); NSLog(@"SSLSetPeerDomainName(): %d", result);
 	
 	// Open keychain.
 	result = SecKeychainCopyDefault(&keychain); NSLog(@"SecKeychainOpen(): %d", result);

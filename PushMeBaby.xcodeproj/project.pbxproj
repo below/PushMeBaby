@@ -14,6 +14,10 @@
 		A690E0150F8BA56300CEA7C7 /* ApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A690E0140F8BA56300CEA7C7 /* ApplicationDelegate.m */; };
 		A690E01D0F8BA57E00CEA7C7 /* ioSock.c in Sources */ = {isa = PBXBuildFile; fileRef = A690E01C0F8BA57E00CEA7C7 /* ioSock.c */; };
 		A690E05D0F8BA8C800CEA7C7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A690E05C0F8BA8C800CEA7C7 /* Security.framework */; };
+		CB6969C515B41254000AD92F /* aps_development.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB6969C415B41254000AD92F /* aps_development.cer */; };
+		CB80CF1C16A5658C002A26C6 /* aps_production-wwdc.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB80CF1B16A5658C002A26C6 /* aps_production-wwdc.cer */; };
+		CBDDA2E415B4443E00F67A45 /* wwdc alert aps_development.cer in Resources */ = {isa = PBXBuildFile; fileRef = CBDDA2E315B4443E00F67A45 /* wwdc alert aps_development.cer */; };
+		CBE511F616A563BC0041413B /* aps_production.cer in Resources */ = {isa = PBXBuildFile; fileRef = CBE511F516A563BC0041413B /* aps_production.cer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,10 @@
 		A690E01B0F8BA57E00CEA7C7 /* ioSock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioSock.h; path = Classes/ioSock.h; sourceTree = "<group>"; };
 		A690E01C0F8BA57E00CEA7C7 /* ioSock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ioSock.c; path = Classes/ioSock.c; sourceTree = "<group>"; };
 		A690E05C0F8BA8C800CEA7C7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		CB6969C415B41254000AD92F /* aps_development.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = aps_development.cer; sourceTree = "<group>"; };
+		CB80CF1B16A5658C002A26C6 /* aps_production-wwdc.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "aps_production-wwdc.cer"; sourceTree = "<group>"; };
+		CBDDA2E315B4443E00F67A45 /* wwdc alert aps_development.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "wwdc alert aps_development.cer"; sourceTree = "<group>"; };
+		CBE511F516A563BC0041413B /* aps_production.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = aps_production.cer; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +117,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CB80CF1B16A5658C002A26C6 /* aps_production-wwdc.cer */,
+				CBE511F516A563BC0041413B /* aps_production.cer */,
+				CBDDA2E315B4443E00F67A45 /* wwdc alert aps_development.cer */,
+				CB6969C415B41254000AD92F /* aps_development.cer */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
@@ -152,7 +164,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "PushMeBaby" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -177,6 +189,10 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				CB6969C515B41254000AD92F /* aps_development.cer in Resources */,
+				CBDDA2E415B4443E00F67A45 /* wwdc alert aps_development.cer in Resources */,
+				CBE511F616A563BC0041413B /* aps_production.cer in Resources */,
+				CB80CF1C16A5658C002A26C6 /* aps_production-wwdc.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,12 +266,11 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -264,11 +279,10 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
 			name = Release;
